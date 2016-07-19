@@ -8,9 +8,11 @@
       command: dnf install -y python2-dnf
       args:
         creates: /usr/bin/dnf-2
+      become: yes
 
     - name: update all packages
       dnf: name="*" state=latest
+      become: yes
 
     - name: install packages
       dnf: name={{ item }} state=latest
@@ -24,6 +26,11 @@
       - vagrant-libvirt
       - transmission-gtk
       - virt-manager
+      become: yes
+
+    - name: print a variable
+      debug: var=ansible_user_dir
+      become: no
 
     - name: setup virtualenv
       pip: name={{ item }} virtualenv={{ ansible_user_dir }}/venv state=latest
