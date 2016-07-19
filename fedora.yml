@@ -1,0 +1,34 @@
+---
+
+- hosts: localhost
+  connection: local
+
+
+  tasks:
+    - name: install python2-dnf
+      command: dnf install -y python2-dnf
+      args:
+        creates: /usr/bin/dnf-2
+
+    - name: update all packages
+      dnf: name="*" state=latest
+
+    - name: install packages
+      dnf: name={{ item }} state=latest
+      with_items:
+      - tmux
+      - git
+      - vim-enhanced
+      - python2-virtualenv
+      - vagrant
+      - hexchat
+      - vagrant-libvirt
+      - transmission-gtk
+      - virt-manager
+
+    - name: setup virtualenv
+      pip: name={{ item }} virtualenv={{ ansible_user_dir }}/venv state=latest
+      with_items:
+      - ipython
+      - cm_api 
+      become: no
