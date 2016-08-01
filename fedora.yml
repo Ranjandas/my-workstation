@@ -10,8 +10,18 @@
         creates: /usr/bin/dnf-2
       become: yes
 
+    - name: add docker yum repo
+      yum_repository:
+          name: docker
+          description: Docker Official YUM Repository
+          baseurl: http://yum.dockerproject.org/repo/main/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}
+          enabled: yes
+          gpgkey: http://yum.dockerproject.org/gpg
+
     - name: update all packages
-      dnf: name="*" state=latest
+      dnf:
+          name: "*"
+          state: latest
       become: yes
 
     - name: install packages
@@ -26,6 +36,7 @@
       - vagrant-libvirt
       - transmission-gtk
       - virt-manager
+      - docker-engine
       become: yes
 
     - name: print a variable
